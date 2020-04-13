@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="lib/app.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="">
+        &nbsp;
+    </div>
+    <div id="app" class="container">
+
+    </div>
+    <!-------------------Templates---------------------->
+    <!--login template-->
+    <script type="text/template" id="loginTemplate">
+        <form id="" class="container">
+            <div class="input-group">
+                <label class="col-2">User Name</label>
+                <input class="col-6" name="userName" />
+            </div>
+            <div class="input-group">
+                <label class="col-2">Password</label>
+                <input type="password" class="col-6" name="password" />
+            </div>
+            <div class="form-group col-8 margin-top-15 text-right">
+                <button type="button" class="btnLogin btn btn-success">Login</button>
+                <button type="button" class="btnGoToRegister btn btn-info">Register</button>
+            </div>
+        </form>
+    </script>
+    <!--user view template-->
+    <script type="text/template" id="userViewTemplate">
+
+        <div id="" class="">
+            <span>Hello</span>
+            &nbsp;
+            <span class="" name="firstName"></span>
+            &nbsp;
+            <span class="" name="lastName"></span>
+            !
+        </div>
+    </script>
+    <!--user edit template-->
+    <script type="text/template" id="userEditTemplate">
+        <form class="container">
+            <div class="input-group">
+                <label class="col-md-3">User Name</label>
+                <input class="form-control" name="userName" />
+            </div>
+            <div class="input-group">
+                <label class="col-md-3">First Name</label>
+                <input class="form-control" name="firstName" />
+            </div>
+            <div class="input-group">
+                <label class="col-md-3">Last Name</label>
+                <input class="form-control" name="lastName" />
+            </div>
+            <input type="hidden" name="userId" />
+            <div class="form-group">
+                <button type="button" class="btnUpdateUser">Update</button>
+            </div>
+        </form>
+    </script>
+    <script type="text/template" id="registrationTemplate">
+        <form>
+            <div class="input-group">
+                <label class="col-md-3">User Name</label>
+                <input class="form-control" name="userName" />
+            </div>
+            <div class="input-group">
+                <label class="col-md-3">First Name</label>
+                <input class="form-control" name="firstName" />
+            </div>
+            <div class="input-group">
+                <label class="col-md-3">Last Name</label>
+                <input class="form-control" name="lastName" />
+            </div>
+            <div class="input-group">
+                <label class="col-md-3">Password</label>
+                <input type="password" class="form-control" name="password" />
+            </div>
+            <div class="form-group text-right margin-top-15">
+                <button type="button" class="btnRegister btn btn-success">Register</button>
+            </div>
+            <div class="validationErrors text-danger"></div>
+        </form>
+    </script>
+    <script type="text/template" id="mainPageTemplate">
+        <div>
+            <nav class="navbar navbar-dark bg-dark text-light fixed-top navbar-height">
+
+                <div class="userContainer col-10"></div>
+                <button class="btn btn-danger btnLogOut">Logout</button>
+            </nav>
+            <div class="navbar-height">
+                &nbsp;
+            </div>
+            <div class="container row">
+                <div class="col-5">
+                    <h2>All Market Instruments</h2>
+                    <div class="container">
+                        <input class="globalSearchBar col-12" type="search" placeholder="Search" />
+                    </div>
+                </div>
+                <div class="col-5 offset-2">
+                    <h2>Tracked Instruments</h2>
+                    <div class="col-12 row" col-12>
+                        <input class="userSearchBar col-11" type="search" placeholder="Search" />
+
+                        <div class="col-1">
+                            <div><button class="btn btn-success btnSaveInstruments">Save</button></div>
+                            <span class="resultMsg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="globalInstruments col-5"></div>
+
+                <div class="buttons col-2 margin-top-15">
+                    <div class="container margin-top-15">
+                        <button class="btn btn-dark btnAddInstruments">-></button>
+                    </div>
+                    <div class="container margin-top-15" ">
+                        <button class="btn btnDelete btn-dark">&lt;-</button>
+                    </div>
+                </div>
+                <div class="userInstruments col-5"></div>
+
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="instrumentsListTemplate">
+        <div>
+            <div class="container row font-weight-bolder">
+                <div class="col-4" name="name">Name</div>
+                <div class="col-4" name="symbol">Symbol</div>
+                <div class="col-4" name="instrumentType">Type</div>
+            </div>
+            <ul class="list-group instrumentsList"></ul>
+        </div>
+    </script>
+    <!--instrument template-->
+    <script type="text/template" id="instrumentTemplate">
+        <li class="list-group-item list-group-item-action selectable instrument">
+            <div class="row">
+                <div class="col-md-4" name="name"></div>
+                <div class="col-md-4" name="symbol"></div>
+                <div class="col-md-4" name="instrumentType"></div>
+                <input type="hidden" name="instrumentId" />
+            </div>
+        </li>
+    </script>
+    <script src="src/index.js" type="module"></script>
+
+
+</body>
+</html>
