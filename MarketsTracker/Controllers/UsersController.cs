@@ -26,13 +26,13 @@ namespace MarketsTracker.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}", Name = "GetUser")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id,[FromQuery]int instrumentsPage=1, [FromQuery]int amount=100)
         {
             if (id < 1)
                 return UnprocessableEntity("invalid id");
             if (id.ToString() != User.Identity.Name)
                 return Forbid();
-            var user = await _usersService.Get(id);
+            var user = await _usersService.Get(id,instrumentsPage,amount);
             if (user == null)
                 return NotFound();
 

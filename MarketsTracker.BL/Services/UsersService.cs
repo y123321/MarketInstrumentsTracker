@@ -18,7 +18,7 @@ namespace MarketsTracker.Services
 
         public async Task<User> Authenticate(string userName, string password) =>await  _repository.Authenticate(userName, password);
 
-        public async Task<User> Get(int id) => await _repository.GetUserById(id);
+        public async Task<User> Get(int id,int instrumentsPage,int amount) => await _repository.GetUserById(id, instrumentsPage, amount);
 
         public async Task<bool> IsUserExists(int userId) => await _repository.IsUserExists(userId);
         public async Task<bool> IsUserExists(string userName) => await _repository.IsUserExists(userName);

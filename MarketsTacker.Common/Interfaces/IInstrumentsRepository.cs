@@ -6,9 +6,9 @@ namespace MarketsTracker.Common
 {
     public interface IInstrumentsRepository
     {
-        Task<ICollection<Instrument>> GetAllInstruments();
-        Task<Instrument> GetInstrument(int id);
-        Task<ICollection<Instrument>> GetUserInstruments(int userId);
+        Task<ICollection<Instrument>> GetAllInstruments(int page, int amount);
+        Task<Instrument> GetInstrument(int id, int page, int amount);
+        Task<ICollection<Instrument>> GetUserInstruments(int userId, int page, int amount);
         Task UpdateUserInstruments(int userId,ICollection<int> instrumentIds);
     }
 }

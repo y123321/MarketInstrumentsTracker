@@ -5,7 +5,7 @@ namespace MarketsTracker.Common
 {
     public interface IUsersService
     {
-        Task<User> Get(int id);
+        Task<User> Get(int id,int instrumentsPage, int amount);
         Task Register(RegistrationRequest user);
         Task Update(User user);
         Task<bool> IsUserExists(int userId);

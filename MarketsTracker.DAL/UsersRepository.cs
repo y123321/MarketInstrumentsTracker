@@ -94,7 +94,7 @@ namespace MarketsTracker.DAL
                             INSERT INTO [user] (userName , passwordHash, passwordSalt, firstName, lastName) 
                             VALUES(@UserName,@Hash,@Salt,@FirstName,@LastName);
                         ";
-                       
+
             var hashParam = new SqlParameter("@Hash", SqlDbType.Binary);
             hashParam.Value = passwordHash;
             var saltParam = new SqlParameter("@Salt", SqlDbType.Binary);
@@ -110,21 +110,31 @@ namespace MarketsTracker.DAL
             await QueryExecuter.ExecuteNoQuery(sql, _connectionString, prams);
         }
 
-        public async Task<User> GetUserById(int userId)
+        public async Task<User> GetUserById(int userId, int instrumentsPage = 1, int amount = 100)
         {
-            var sql = @"SELECT u.userId, u.userName ,u.firstName, u.lastName,i.instrumentId,i.name,i.symbol,i.instrumentType
-                        FROM[user] u
-                        LEFT JOIN userInstrument ui
-                        ON u.userId = ui.userId
-                        LEFT JOIN Instrument i
-                        ON i.instrumentId = ui.instrumentId
-                        WHERE u.userId=@UserId";
-            var prams = new SqlParameter("@UserId", userId);
-            User user = await GetUser(sql, prams);
+            var sql = @"SELECT * 
+                        FROM
+                        (
+                            SELECT u.userId, u.userName ,u.firstName, u.lastName,i.instrumentId,i.name,i.symbol,i.instrumentType, ROW_NUMBER() OVER (ORDER BY i.name) AS RowNum
+                            FROM[user] u
+                            LEFT JOIN userInstrument ui
+                            ON u.userId = ui.userId
+                            LEFT JOIN Instrument i
+                            ON i.instrumentId = ui.instrumentId
+                            WHERE u.userId=@UserId
+                        ) a
+                        WHERE RowNum>=@From 
+                            AND RowNum<@To
+                        ORDER BY RowNum
+
+";
+            var prams = DatabaseUtils.GetPagingParams(instrumentsPage, amount);
+            prams.Add(new SqlParameter("@UserId", userId));
+            User user = await GetUser(sql, prams.ToArray());
             return user;
         }
 
-        private async Task<User> GetUser(string sql, SqlParameter prams)
+        private async Task<User> GetUser(string sql, params SqlParameter[] prams)
         {
             Func<SqlCommand, Task<ICollection<User>>> func = async cmd =>
             {
@@ -139,7 +149,7 @@ namespace MarketsTracker.DAL
                         throw new DataException("results returned for more that one user");
                     var instrument = Mappers.MapToInstrumentEntity(reader)
                         .MapToInstrumentDto();
-                    if(instrument.InstrumentId>0)
+                    if (instrument.InstrumentId > 0)
                         user.Instruments.Add(instrument);
                 }
                 return new User[] { user };
@@ -168,7 +178,7 @@ namespace MarketsTracker.DAL
                               firstName=@FirstName,
                               lastName=@LastName,
                           WHERE userId=@UserId";
-            var prams = new SqlParameter[] 
+            var prams = new SqlParameter[]
             {
                 new SqlParameter("@UserName",user.UserName),
                 new SqlParameter("@FirstName",user.FirstName),

@@ -26,18 +26,18 @@ namespace MarketsTracker.Controllers
         }
         // GET: api/Instruments
         [HttpGet(Name = "GetInstruments")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int page, [FromQuery]int amount)
         {
        
-            ICollection<Instrument> instruments = await _instrumentsService.GetAllInstruments();
+            ICollection<Instrument> instruments = await _instrumentsService.GetAllInstruments(page,amount);
             return Ok(instruments);
         }
 
         // GET: api/Instruments/5
         [HttpGet("{id}", Name = "GetInstrument")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, [FromQuery] int page,[FromQuery]int amount)
         {
-            Instrument instrument = await _instrumentsService.GetInstrument(id);
+            Instrument instrument = await _instrumentsService.GetInstrument(id,page,amount);
             return Ok(instrument);
         }
         

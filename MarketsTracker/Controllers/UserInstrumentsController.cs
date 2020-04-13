@@ -19,30 +19,31 @@ namespace MarketsTracker.Controllers
     {
         private readonly IInstrumentsService _instrumentsService;
 
-        public UserInstrumentsController(IInstrumentsService instrumentsService) {
+        public UserInstrumentsController(IInstrumentsService instrumentsService)
+        {
             _instrumentsService = instrumentsService;
         }
         // GET: /<controller>/
         [HttpPut]
         public async Task<IActionResult> Put(int userId, [FromBody]int[] instrumentIds)
         {
-            if (instrumentIds==null)
+            if (instrumentIds == null)
                 return BadRequest();
-            if(userId<1)
+            if (userId < 1)
                 return UnprocessableEntity();
             if (userId.ToString() != User.Identity.Name)
                 return Forbid();
-            await _instrumentsService.UpdateUserInstruments(userId,instrumentIds);
+            await _instrumentsService.UpdateUserInstruments(userId, instrumentIds);
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> Get(int userId)
+        public async Task<IActionResult> Get(int userId, [FromQuery] int page, [FromQuery]int amount)
         {
-            if (userId<1)
+            if (userId < 1)
                 return UnprocessableEntity();
             if (userId.ToString() != User.Identity.Name)
                 return Forbid();
-            var instruments = await _instrumentsService.GetUserInstruments(userId);
+            var instruments = await _instrumentsService.GetUserInstruments(userId, page, amount);
             return Ok(instruments);
         }
     }

@@ -17,41 +17,69 @@ namespace MarketsTracker.DAL
             _connectionString = databaseOptions.ConnectionString;
         }
 
-        public async Task<ICollection<Instrument>> GetAllInstruments()
+        public async Task<ICollection<Instrument>> GetAllInstruments(int page = 1, int amount = 100)
         {
-            var sql = @"
-                        SELECT i.instrumentId,i.name,i.symbol,i.instrumentType
-                        FROM instrument i";
-            var instruments=await ExecuteInstrumentsQuery(sql);
+
+            var sql = @"SELECT * 
+                        FROM
+                        (
+                            SELECT i.instrumentId,i.name,i.symbol,i.instrumentType, ROW_NUMBER() OVER (ORDER BY i.name) AS RowNum
+                            FROM instrument i
+                        ) a
+                        WHERE RowNum>=@From 
+                            AND RowNum<@To
+                        ORDER BY RowNum";
+            var prams = DatabaseUtils.GetPagingParams(page, amount);
+            var instruments = await ExecuteInstrumentsQuery(sql, prams.ToArray());
             return instruments;
         }
 
-        public async Task<Instrument> GetInstrument(int id)
+
+
+        public async Task<Instrument> GetInstrument(int id, int page = 1, int amount = 100)
         {
             var sql = @"
-                        SELECT i.instrumentId,i.name,i.symbol,i.instrumentType
-                        FROM instrument i
-                        WHERE i.instrumentId = @InstrumentId";
+                        SELECT * 
+                        FROM
+                        (
+                            SELECT i.instrumentId,i.name,i.symbol,i.instrumentType, ROW_NUMBER() OVER (ORDER BY i.name) AS RowNum
+                            FROM instrument i
+                            WHERE i.instrumentId = @InstrumentId
+                        ) a
+                        WHERE RowNum>=@From 
+                            AND RowNum<@To
+                        ORDER BY RowNum"; 
             var param = new SqlParameter("@InstrumentId", id);
-            var instruments = await ExecuteInstrumentsQuery(sql, param);
+            var pagePrams = DatabaseUtils.GetPagingParams(page, amount);
+            pagePrams.Add(param);
+            var instruments = await ExecuteInstrumentsQuery(sql, pagePrams.ToArray());
             return instruments.FirstOrDefault();
         }
 
-        public async Task<ICollection<Instrument>> GetUserInstruments(int userId)
+        public async Task<ICollection<Instrument>> GetUserInstruments(int userId, int page, int amount)
         {
             var sql = @"
-                        SELECT i.instrumentId,i.name,i.symbol,i.instrumentType
-                        FROM instrument i
-                        JOIN userInstrument iu
-                        ON i.instrumentId = iu.instrumentId 
-                        WHERE iu.userId = @UserId";
+                        SELECT * 
+                        FROM
+                        (
+                            SELECT i.instrumentId,i.name,i.symbol,i.instrumentType, ROW_NUMBER() OVER (ORDER BY i.name) AS RowNum
+                            FROM instrument i
+                            JOIN userInstrument iu
+                            ON i.instrumentId = iu.instrumentId 
+                            WHERE iu.userId = @UserId
+                        ) a
+                        WHERE RowNum>=@From 
+                            AND RowNum<@To
+                        ORDER BY RowNum";
             var param = new SqlParameter("@UserId", userId);
-            Instrument[] instruments = await ExecuteInstrumentsQuery(sql, param);
+            var pagePrams = DatabaseUtils.GetPagingParams(page, amount);
+            pagePrams.Add(param);
+            Instrument[] instruments = await ExecuteInstrumentsQuery(sql, pagePrams.ToArray());
             return instruments;
         }
 
-        
-        public async Task UpdateUserInstruments(int userId,ICollection<int> instrumentIds)
+
+        public async Task UpdateUserInstruments(int userId, ICollection<int> instrumentIds)
         {
             var valuesPerStatementLimit = 1000;
             var groups = instrumentIds.ToArray().Split(valuesPerStatementLimit);
@@ -78,7 +106,7 @@ namespace MarketsTracker.DAL
                             END CATCH
                         COMMIT;";
             var pram = new SqlParameter("@UserId", userId);
-            await QueryExecuter.ExecuteNoQuery(sql,_connectionString,pram);
+            await QueryExecuter.ExecuteNoQuery(sql, _connectionString, pram);
         }
 
 
