@@ -4,14 +4,7 @@
     <meta charset="utf-8" />
     <title></title>
     <link href="lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <style type="text/css">
-        .margin-top-15 {
-            margin-top: 15px;
-        }
-        .navbar-height{
-            height:55px;
-        }
-    </style>
+    <link href="lib/app.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -26,16 +19,16 @@
     <script type="text/template" id="loginTemplate">
         <form id="" class="container">
             <div class="input-group">
-                <label class="col-md-3">User Name</label>
-                <input class="" name="userName" />
+                <label class="col-2">User Name</label>
+                <input class="col-6" name="userName" />
             </div>
             <div class="input-group">
-                <label class="col-md-3">Password</label>
-                <input type="password" class="" name="password" />
+                <label class="col-2">Password</label>
+                <input type="password" class="col-6" name="password" />
             </div>
-            <div class="form-group">
-                <button type="button" class="btnLogin bg-success">Login</button>
-                <button type="button" class="btnGoToRegister">Register</button>
+            <div class="form-group col-8 margin-top-15 text-right">
+                <button type="button" class="btnLogin btn btn-success">Login</button>
+                <button type="button" class="btnGoToRegister btn btn-info">Register</button>
             </div>
         </form>
     </script>
@@ -90,8 +83,8 @@
                 <label class="col-md-3">Password</label>
                 <input type="password" class="form-control" name="password" />
             </div>
-            <div class="form-group">
-                <button type="button" class="btnRegister">Register</button>
+            <div class="form-group text-right margin-top-15">
+                <button type="button" class="btnRegister btn btn-success">Register</button>
             </div>
             <div class="validationErrors text-danger"></div>
         </form>

@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MarketsTracker.BL\MarketsTracker.BL.csproj" />
     <ProjectReference Include="..\MarketsTracker.DAL\MarketsTracker.DAL.csproj" />
     <ProjectReference Include="..\MarketsTracker.Model\MarketsTracker.Model.csproj" />
