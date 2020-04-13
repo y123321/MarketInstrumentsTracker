@@ -10,7 +10,7 @@ Prerequisite:
 
 installation instructions:
 
-1. Open the "Published" directory
+1. Download and extract MarketsTracker.zip from the root folder
 
 2. Update the connectin string of the database in the appSetting.json file to match the database you wish to use for the app. 
 
