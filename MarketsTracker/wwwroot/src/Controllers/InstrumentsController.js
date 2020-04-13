@@ -25,10 +25,10 @@ class InstrumentsController {
      * @param {DOM object} view
      * @param {string} searchTerm
      */
-    searchInstrumentList(view,searchTerm) {
+    searchInstrumentList(view, searchTerm) {
         let elements = view.querySelectorAll(".instrument");
         elements.forEach(el => {
-            if (el.innerText.indexOf(searchTerm) === -1) {
+            if (!el || !el.innerText || el.innerText.toLowerCase().indexOf(searchTerm) === -1) {
                 el.setAttribute("hidden", "hidden");
             }
             else el.removeAttribute("hidden");
